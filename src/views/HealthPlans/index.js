@@ -11,7 +11,7 @@ import Form from '../../components/Form'
 import Select from '../../components/Select'
 import Input from '../../components/Input'
 
-const baseApi = "https://lb-aws-1105894158.sa-east-1.elb.amazonaws.com";
+const baseApi = "http://lb-aws-1105894158.sa-east-1.elb.amazonaws.com";
 const apiKey = "api-key=ddd70c32-fc98-4618-b494-a9698f824353";
 
 const apiKeyFindEntity = "api-key=4b94dba2-5524-4632-939b-92df1c50a645"
