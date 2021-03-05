@@ -10,6 +10,9 @@ import SubmitButton from '../../components/SubmitButton'
 import Form from '../../components/Form'
 import Select from '../../components/Select'
 import Input from '../../components/Input'
+import DatePicker from '../../components/DatePicker';
+import moment from 'moment';
+import { VALIDATIONS } from '../../validations/index';
 
 const baseApi = "http://lb-aws-1105894158.sa-east-1.elb.amazonaws.com";
 const apiKey = "api-key=ddd70c32-fc98-4618-b494-a9698f824353";
@@ -29,21 +32,23 @@ const HealthPlans = () => {
   const [datanascimento, setDatanascimento] = useState([]);
   const [healthPlansList, setHealthPlansList] = useState();
   
-  // ok
   const getProfessionalList = () => {
-    setTimeout(() => {
-      if(cidade !== undefined || cidade !== null) {
-        axios
-          .get(`${baseApi}/profissao/${uf}/${cidade}?${apiKey}`)
-          .then((response) => {
-            setProfessionList(response.data);
-          })
-          .catch((erro) => {
-            console.log(erro.response);
-        });
-      }
-
-    }, 1000) 
+    if(cidade !== '') {
+      console.log(uf)
+        if(uf !== undefined && uf.length > 0) {
+          console.log('aqui')
+          axios
+            .get(`${baseApi}/profissao/${uf}/${cidade}?${apiKey}`)
+            .then((response) => {
+              setProfessionList(response.data);
+            })
+            .catch((erro) => {
+              console.log(erro.response);
+          });
+        }
+  
+    
+    }
   }
 
   const getEntityList = () => {
@@ -66,7 +71,7 @@ const HealthPlans = () => {
         entidade: values.entidade,
         uf: values.uf,
         cidade: values.cidade,
-        datanascimento: [datanascimento],
+        datanascimento: [values.datanascimento.split("T")[0]],
       })
       .then((response) => {
         setHealthPlansList(response?.data?.planos)
@@ -97,6 +102,7 @@ const HealthPlans = () => {
         <Row gutter={[20, 20]}>
           <Formik
             initialValues={{}}
+            validationSchema={VALIDATIONS}
             validateOnMount
             onSubmit={(values, { setSubmitting, resetForm }) => {
               fetchHealthPlans(values)
@@ -107,7 +113,7 @@ const HealthPlans = () => {
             <Form layout="vertical" style={{ width: '100%' }}>
               <Row gutter={[20,20]}>
                 <Col md={12}>
-                  <Form.Item name="uf" label="Estado">
+                  <Form.Item name="uf" required label="Estado">
                     <Select
                       name="uf"
                       placeholder="Selecione o estado"
@@ -123,7 +129,7 @@ const HealthPlans = () => {
                   </Form.Item>
                 </Col>
                 <Col md={12}>
-                  <Form.Item name="cidade" label="Cidade">
+                  <Form.Item name="cidade" required label="Cidade">
                     <Input.Search
                       name="cidade"
                       enterButton
@@ -137,7 +143,7 @@ const HealthPlans = () => {
               </Row>
               <Row gutter={[20,20]}>
                 <Col md={12}>
-                  <Form.Item name="profissao" label="Profissão">
+                  <Form.Item name="profissao" required label="Profissão">
                     <Select
                       name="profissao"
                       placeholder="Selecione a profissão"
@@ -153,7 +159,7 @@ const HealthPlans = () => {
                   </Form.Item>
                 </Col>
                 <Col md={12}>
-                  <Form.Item name="entidade" label="Entidade">
+                  <Form.Item name="entidade" required label="Entidade">
                     <Select
                       name="entidade"
                       placeholder="Selecione a entidade"
@@ -170,20 +176,25 @@ const HealthPlans = () => {
               </Row>
               <Row>
                 <Col md={12}>
-                  <FormGroup htmlFor="datanascimento" label="Data de nascimento*">
-                      <input
-                        defaultValue={datanascimento}
-                        type="date"
-                        className="form-control"
-                        id="inputNome"
-                        aria-describedby="emailHelp"
-                        placeholder="Digite a longitude"
-                        onChange={(e) =>
-                          setDatanascimento(e.target.value)
-                        }
-                      ></input>
-                    </FormGroup>
-                  </Col>
+                  <Form.Item name="datanascimento" required label="Data de nascimento">
+                    <DatePicker
+                      name="datanascimento"
+                      format="DD/MM/YYYY"
+                      style={{ width: '100%' }}
+                      ranges={{
+                        Hoje: [moment().startOf('day'), moment()],
+                        'Última semana': [
+                          moment().subtract(1, 'weeks'),
+                          moment(),
+                        ],
+                        'Último mês': [moment().subtract(1, 'months'), moment()],
+                        'Último ano': [moment().subtract(1, 'years'), moment()],
+                      }}
+                      disabledDates
+                      disableDatesLarger
+                    />
+                  </Form.Item>
+                </Col>
               </Row>
               <Col md={24} justify="end">
                 <SubmitButton showValidationErrors icon={null}>
