@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Card from "../../components/Card";
 import { Typography, Col, Row,  } from "antd";
 import axios from "axios";
-import FormGroup from "../../components/FormGroup";
 import HealthPlansTable from  './HealthPlansTable';
 import { STATES } from '../../data/index';
 import { Formik } from 'formik';
@@ -29,7 +28,6 @@ const HealthPlans = () => {
   const [uf, setUf] = useState([]);
   const [cidade, setCidade] = useState('');
   const [profissao, setProfissao] = useState([]);
-  const [datanascimento, setDatanascimento] = useState([]);
   const [healthPlansList, setHealthPlansList] = useState();
   
   const getProfessionalList = () => {
