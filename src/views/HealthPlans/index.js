@@ -34,7 +34,9 @@ const HealthPlans = () => {
     setTimeout(() => {
       if(cidade !== undefined || cidade !== null) {
         axios
-          .get(`${baseApi}/profissao/${uf}/${cidade}?${apiKey}`)
+          .get(`${baseApi}/profissao/${uf}/${cidade}?${apiKey}`, {headers: {
+            'Content-Type': 'application/json'}
+         })
           .then((response) => {
             setProfessionList(response.data);
           })
@@ -49,7 +51,9 @@ const HealthPlans = () => {
   const getEntityList = () => {
     if(profissao !== undefined) {
       axios
-        .get(`${baseApi}/entidade/${profissao}/${uf}/${cidade}?${apiKeyFindEntity}`)
+        .get(`${baseApi}/entidade/${profissao}/${uf}/${cidade}?${apiKeyFindEntity}`, {headers: {
+          'Content-Type': 'application/json'}
+       } )
         .then((response) => {
           setEntityList(response.data);
         })
@@ -67,7 +71,9 @@ const HealthPlans = () => {
         uf: values.uf,
         cidade: values.cidade,
         datanascimento: [datanascimento],
-      })
+      }, {headers: {
+        'Content-Type': 'application/json'}
+     })
       .then((response) => {
         setHealthPlansList(response?.data?.planos)
       })
