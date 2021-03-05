@@ -11,7 +11,7 @@ import Form from '../../components/Form'
 import Select from '../../components/Select'
 import Input from '../../components/Input'
 
-const baseApi = "http://lb-aws-1105894158.sa-east-1.elb.amazonaws.com";
+const baseApi = "https://lb-aws-1105894158.sa-east-1.elb.amazonaws.com";
 const apiKey = "api-key=ddd70c32-fc98-4618-b494-a9698f824353";
 
 const apiKeyFindEntity = "api-key=4b94dba2-5524-4632-939b-92df1c50a645"
@@ -34,9 +34,7 @@ const HealthPlans = () => {
     setTimeout(() => {
       if(cidade !== undefined || cidade !== null) {
         axios
-          .get(`${baseApi}/profissao/${uf}/${cidade}?${apiKey}`, {headers: {
-            'Content-Type': 'application/json'}
-         })
+          .get(`${baseApi}/profissao/${uf}/${cidade}?${apiKey}`)
           .then((response) => {
             setProfessionList(response.data);
           })
@@ -51,9 +49,7 @@ const HealthPlans = () => {
   const getEntityList = () => {
     if(profissao !== undefined) {
       axios
-        .get(`${baseApi}/entidade/${profissao}/${uf}/${cidade}?${apiKeyFindEntity}`, {headers: {
-          'Content-Type': 'application/json'}
-       } )
+        .get(`${baseApi}/entidade/${profissao}/${uf}/${cidade}?${apiKeyFindEntity}`)
         .then((response) => {
           setEntityList(response.data);
         })
@@ -71,9 +67,7 @@ const HealthPlans = () => {
         uf: values.uf,
         cidade: values.cidade,
         datanascimento: [datanascimento],
-      }, {headers: {
-        'Content-Type': 'application/json'}
-     })
+      })
       .then((response) => {
         setHealthPlansList(response?.data?.planos)
       })
