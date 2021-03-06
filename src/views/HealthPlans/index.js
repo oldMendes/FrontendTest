@@ -44,8 +44,6 @@ const HealthPlans = () => {
               console.log(erro.response);
           });
         }
-  
-    
     }
   }
 
